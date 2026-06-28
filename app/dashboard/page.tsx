@@ -11,14 +11,14 @@ type CaseStatus = "Pending" | "Verified" | "Rejected" | "Funded" | "Closed";
 
 type Profile = {
   full_name: string;
-  role: "donor" | "recipient";
+  role: "donor" | "recipient" | "vendor";
   verification_status?: VerificationStatus;
 };
 
 type DonationRow = {
-  id: string;
-  amount_pkr: number;
-  created_at: string;
+  id: any;
+  amount_pkr: any;
+  created_at: any;
   cases: { title: string } | null;
 };
 
@@ -407,7 +407,7 @@ function DashboardContent() {
           setDonations([]);
         } else {
           setDonations(
-            ((donationsData as DonationRow[]) ?? []).map((row) => ({
+            ((donationsData as any[]) ?? []).map((row) => ({
               id: row.id,
               caseTitle: row.cases?.title ?? "Untitled case",
               amount: Number(row.amount_pkr),

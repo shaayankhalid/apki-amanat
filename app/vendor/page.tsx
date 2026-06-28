@@ -503,7 +503,7 @@ export default function VendorDashboardPage() {
     }
 
     setOrders(
-      ((ordersData as OrderRow[]) ?? []).map((row) => ({
+      ((ordersData as any[]) ?? []).map((row) => ({
         id: row.id,
         recipientFirstName: row.recipient?.full_name
           ? firstName(row.recipient.full_name)

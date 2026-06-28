@@ -130,7 +130,7 @@ function CheckoutSuccessContent() {
         return;
       }
 
-      const { data, error: receiptError } = await supabase
+      const { data: receiptData, error: receiptError } = await supabase
         .from("receipts")
         .select(
           `
@@ -144,7 +144,7 @@ function CheckoutSuccessContent() {
         .eq("id", receiptId)
         .single();
 
-      if (receiptError || !data) {
+      if (receiptError || !receiptData) {
         const stored = loadStoredReceipt(receiptId) as StoredReceiptPayload | null;
         if (stored?.items?.length) {
           setReceipt(receiptFromSession(stored, receiptId));
@@ -157,16 +157,33 @@ function CheckoutSuccessContent() {
         return;
       }
 
+      const data = receiptData as any;
+
       setReceipt({
         id: data.id,
         items: (data.items as ReceiptItem[]) ?? [],
         total_pkr: Number(data.total_pkr),
         created_at: data.created_at,
-        caseTitle: data.cases?.title ?? "Verified case",
-        vendorName: data.vendors?.business_name ?? "Vendor",
-        donorName: data.donor?.full_name ?? "Donor",
-        recipientEmail: data.recipient?.email ?? null,
-        recipientName: data.recipient?.full_name ?? "Recipient",
+        caseTitle:
+          (Array.isArray(data.cases)
+            ? data.cases[0]?.title
+            : data.cases?.title) ?? "Verified case",
+        vendorName:
+          (Array.isArray(data.vendors)
+            ? data.vendors[0]?.business_name
+            : data.vendors?.business_name) ?? "Vendor",
+        donorName:
+          (Array.isArray(data.donor)
+            ? data.donor[0]?.full_name
+            : data.donor?.full_name) ?? "Donor",
+        recipientEmail:
+          (Array.isArray(data.recipient)
+            ? data.recipient[0]?.email
+            : data.recipient?.email) ?? null,
+        recipientName:
+          (Array.isArray(data.recipient)
+            ? data.recipient[0]?.full_name
+            : data.recipient?.full_name) ?? "Recipient",
       });
       setLoading(false);
     }

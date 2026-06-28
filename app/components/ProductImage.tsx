@@ -11,7 +11,7 @@ export default function ProductImage({
   imageUrl?: string | null;
   className?: string;
 }) {
-  const icon = PRODUCT_CATEGORY_ICONS[category] ?? "📦";
+  const icon = PRODUCT_CATEGORY_ICONS[category as keyof typeof PRODUCT_CATEGORY_ICONS] ?? "📦";
 
   if (imageUrl) {
     return (

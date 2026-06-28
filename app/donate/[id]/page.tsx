@@ -221,6 +221,7 @@ export default function DonatePage() {
     async function loadVendors() {
       setVendorsLoading(true);
 
+      if (!caseDetails) return;
       const types = businessTypesForCategory(caseDetails.category);
       let query = supabase
         .from("vendors")
